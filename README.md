@@ -4,6 +4,12 @@ This is a command-line utility that copies user records (telephone number, jabbe
 
 Note, this script overwrites user profile data with AD data (if set). You should only run it if AD is your source of truth for user profiles, and you don't mind overwriting any Confluence profile customizations users may have made.
 
+## Installation
+
+Some Ruby gems are required before the script will work:
+
+    $ gem install net-ldap json open-uri nokogiri parallel
+
 ## Sample Usage
 
     $ ./sync_ad_confluence.rb \
