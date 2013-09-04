@@ -68,7 +68,6 @@ def activedirectory_users(opts, accountname_expr = 'jturner')
     
     }
 
-    #filter = Net::LDAP::Filter.eq("objectCategory", "Person*")
     filter = Net::LDAP::Filter.construct("(&(objectCategory=Person)(sAMAccountName=#{accountname_expr}))")
 
     ldap.search(
@@ -97,6 +96,7 @@ def update_confluence_profile(opts, fields)
     params = {'os_authType' => 'basic',
 	'username' => username,
 	'fullName' => fullname,
+	# Note: email address is read-only on my LDAP-backed system, so the next line might be removable:
 	'email' => email,
 	'confirm' => 'Submit'
     }
@@ -109,12 +109,10 @@ def update_confluence_profile(opts, fields)
     when Net::HTTPRedirection
 	# We expect to be redirected to the user's profile, and this function returns that link
 	if res["Location"] =~ /authenticate\.action/ then
-	    $stderr.puts "Please disable Secure administrator sessions aka websudo"
+	    $stderr.puts "Please disable Secure administrator sessions aka websudo, at #{opts[:confbaseurl]}/admin/viewsecurityconfig.action"
 	    exit 1
 	end
 	return res["Location"]
-    #when Net::HTTPSuccess
-#	puts res.body
     else
 	raise "Unexpected HTTP response #{res.value} setting fields #{fields}: #{res}"
     end
@@ -161,7 +159,6 @@ def ad_to_profile(adhash)
     confhash[:location]=[o,s,l,st,p,co].select{|x|x}.join(", ")
     return confhash
 end
-
 
 
 username=ARGV.shift || '*'
