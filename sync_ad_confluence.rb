@@ -155,6 +155,7 @@ Parallel.map( activedirectory_users(opts, username), :in_processes=>10 ) { |entr
 	$stderr.puts " *** Skipping #{profilefields[:username]} as it has no email record" if opts[:verbose]
     else
 	profileurl = update_confluence_profile(opts, profilefields)
-	puts "Updated " + profileurl if opts[:verbose]
+	profileurl.gsub! /;jsessionid=.*?(?=\?)/, '' # Get rid of jsessionid for readability
+	puts "#{username}: set profile: #{profilefields}" if opts[:verbose]
     end
 }
