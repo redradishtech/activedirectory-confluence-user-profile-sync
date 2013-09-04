@@ -58,5 +58,5 @@ Note that for AD attributes (other than samaccountname, displayname and mail):
 
 ## Limitations
 
-Profile pictures are not set, because it is not possible (at least in 5.2.3) for a Confluence administrator to set a user's profile picture. See https://jira.atlassian.com/browse/CONF-6112
+Profile pictures are not set, because it is not possible (at least in 5.2.3) for a Confluence administrator to set a user's profile picture. See https://jira.atlassian.com/browse/CONF-13515
 
