@@ -26,8 +26,8 @@ EOS
     opt :confbaseurl, "Confluence base URL, eg. 'http://wiki.company.com'", :short => 'B', :type=>:string, :default => (ENV['CONF_BASEURL'])
     opt :confuser, "Confluence username", :short=>'U', :type => :string, :default => (ENV['CONF_USER'])
     opt :confpassword, "Confluence password", :short=>'P', :type => :string, :default => (ENV['CONF_PASSWORD'])
+    opt :verbose, "Print updated profile links", :short=>'v'
 end
-
 
 def get_edituser_actionurl(opts, username)
 
@@ -147,7 +147,6 @@ def ad_to_profile(adhash)
     return confhash
 end
 
-
 username=ARGV.shift || '*'
 Parallel.map( activedirectory_users(opts, username), :in_processes=>10 ) { |entry|
 
@@ -155,6 +154,6 @@ Parallel.map( activedirectory_users(opts, username), :in_processes=>10 ) { |entr
     if !profilefields[:email] then
 	$stderr.puts " *** Skipping #{profilefields[:username]} as it has no email record"
     else
-	puts "Updated " + update_confluence_profile(opts, profilefields)
+	puts "Updated " + update_confluence_profile(opts, profilefields) if opts[:verbose]
     end
 }
