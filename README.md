@@ -6,9 +6,14 @@ Note, this script overwrites user profile data with AD data (if set). You should
 
 ## Installation
 
+You will need Ruby (tested on 1.9.3p0, 2.0.0-p195 and 2.0.0p247), eg:
+
+    # aptitude install ruby-1.9.1  # Yes, package 'ruby-1.9.1' packages ruby 1.9.3 on ubuntu
+
 Some Ruby gems are required before the script will work:
 
-    $ gem install net-ldap json open-uri nokogiri parallel
+    # aptitude install ruby1.9.1-dev  # Required for building nokogiri
+    # gem install trollop net-ldap nokogiri parallel
 
 ## Sample Usage
 

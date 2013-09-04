@@ -31,29 +31,16 @@ end
 
 def get_edituser_actionurl(opts, username)
 
-    uri = URI(opts[:confbaseurl] + "/admin/users/edituser.action?os_authType=basic&username=#{username}")
-    req = Net::HTTP::Get.new(uri)
-    req.basic_auth opts[:confuser], opts[:confpassword]
-    req.add_field("X-Atlassian-Token", "no-check")
-    http = Net::HTTP.new(uri.host, uri.port)
-    #http.set_debug_output $stderr
-    res = http.request(req)
-    case res
-    when Net::HTTPSuccess
-	if res.body =~ /Not Permitted/ then
-	    $stderr.puts "Could not find #{username}"
-	    exit 1
-	end
-	#puts "Successfully located user #{username}"
-	html = Nokogiri::HTML(res.body)
-	actionurl = html.css("form[name=editUser]").attribute("action").value
-	return actionurl
-    else
-	raise "Lookup of user #{username} failed"
-	p res
-	res.value
+    pagebody = 
+	open(opts[:confbaseurl] + "/admin/users/edituser.action?os_authType=basic&username=#{username}", "X-Atlassian-Token" => "no-check", :http_basic_authentication=>[opts[:confuser], opts[:confpassword]]) { |f| f.read }
+
+    if pagebody =~ /Not Permitted/ then
+	$stderr.puts "Could not find #{username}"
 	exit 1
     end
+    html = Nokogiri::HTML(pagebody)
+    actionurl = html.css("form[name=editUser]").attribute("action").value
+    return actionurl
 end
 
 # Iterate through AD users
@@ -89,7 +76,7 @@ def update_confluence_profile(opts, fields)
     uri = URI("#{opts[:confbaseurl]}/admin/users/#{actionurl}")
     http = Net::HTTP.new(uri.host, uri.port)
     #http.set_debug_output $stderr
-    req = Net::HTTP::Post.new(uri)
+    req = Net::HTTP::Post.new(uri.request_uri)
     req.basic_auth opts[:confuser], opts[:confpassword]
     req.add_field("X-Atlassian-Token", "no-check")
 
