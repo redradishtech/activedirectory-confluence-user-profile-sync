@@ -23,10 +23,27 @@ Some Ruby gems are required before the script will work:
         --bindpassword="s3cret" \
         --basedn="OU=ADMIN,DC=example,dc=ds" \
         --confbaseurl="http://wiki.example.ds" \
-        --confuser="admin" \
+        --confuser="_profilesyncer" \
         --confpassword="confs3cret" \
-        admin
-    Updated http://wiki.example.ds/admin/users/viewuser.action;jsessionid=4501D470FE1ACD4A32638FC3BB4EFD32?username=admin
+        admin -v
+	admin set profile: {:position=>"Admin role account", :phone=>"(415) 123-4567", :fullname=>"Admin User", :description=>"IT", :username=>"admin", :email=>"admin@example.ds", :location=>"Office location field, somewhere in australia, tasmania, tasmania2, zipcode 1, Australia"}
+
+As the script needs to log in to Confluence as a user with admin rights ('confluence-administrators' group), you may wish to create a role account for this ('_profilesyncer' in this example).
+
+It is suggested that the above command be stored in a script (with permissions set to 0700):
+
+    #!/bin/bash -eu
+    
+    ./sync_ad_confluence.rb \
+        --ldaphost "example.ds" \
+        --binddn="CN=Service Account for LDAP search and Bind,OU=SERVICE ACCOUNTS,OU=ADMIN,DC=example,DC=ds" \
+        --bindpassword="s3cret" \
+        --basedn="OU=ADMIN,DC=example,dc=ds" \
+        --confbaseurl="http://wiki.example.ds" \
+        --confuser="_profilesyncer" \
+        --confpassword="confs3cret" \
+        $*  
+    
 
 ## How it works
 
