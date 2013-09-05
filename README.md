@@ -1,5 +1,7 @@
 # Active Directory to Confluence User Profile Synchronizer
 
+Test modification!
+
 This is a command-line utility that copies user records (telephone number, jabber ID, department, location) from Active Directory to Atlassian Confluence users' profiles. It has been tested against Confluence 5.2.3.
 
 Note, this script overwrites user profile data with AD data (if set). You should only run it if AD is your source of truth for user profiles, and you don't mind overwriting any Confluence profile customizations users may have made.
